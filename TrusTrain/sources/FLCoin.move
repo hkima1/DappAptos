@@ -21,8 +21,8 @@ module TrusTrain::FLCoin{
             100,
             true,
         );
-        assert!(signer::address_of(account)==@TrusTrain_addr,E_NO_ADMIN);
-        assert!(exists<Capabilities<FLC>>(@TrusTrain_addr), E_HAS_CAPABILITIES );
+        assert!(signer::address_of(account)==@TrusTrain,E_NO_ADMIN);
+        assert!(exists<Capabilities<FLC>>(@TrusTrain), E_HAS_CAPABILITIES );
 
         move_to(account, Capabilities<FLC>{
             burn_cap,
@@ -36,14 +36,14 @@ public fun mint<FLC>(
     ): coin::Coin<FLC> acquires Capabilities {
         let account_addr = signer::address_of(account);
 
-        assert!(signer::address_of(account)==@TrusTrain_addr,E_NO_ADMIN);
+        assert!(signer::address_of(account)==@TrusTrain,E_NO_ADMIN);
         assert!(exists<Capabilities<FLC>>(account_addr),E_NO_CAPABILITIES);
 
         let mint_capabilities = &borrow_global<Capabilities<FLC>>(account_addr).mint_cap;
         coin::mint<FLC>(amount, mint_capabilities)
     }
     public fun burn(coins: coin::Coin<FLC>) acquires Capabilities{
-    let burn_capabilities = &borrow_global<Capabilities<FLC>>(@TrusTrain_addr).burn_cap;
+    let burn_capabilities = &borrow_global<Capabilities<FLC>>(@TrusTrain).burn_cap;
     coin::burn<FLC>(coins,burn_capabilities);
 }
 
